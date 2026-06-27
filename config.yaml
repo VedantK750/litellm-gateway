@@ -1,0 +1,17 @@
+# LiteLLM proxy config.
+# The wildcard route forwards ANY model Claude Code asks for to the freemodel
+# reseller (Anthropic-native format), using the single real key held server-side.
+model_list:
+  - model_name: "*"
+    litellm_params:
+      model: "anthropic/*"
+      api_base: "https://cc.freemodel.dev"
+      api_key: "os.environ/FREEMODEL_KEY"
+
+general_settings:
+  master_key: "os.environ/LITELLM_MASTER_KEY"
+  database_url: "os.environ/DATABASE_URL"
+
+litellm_settings:
+  # Silently drop provider params the upstream doesn't accept instead of erroring.
+  drop_params: true

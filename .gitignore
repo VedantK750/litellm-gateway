@@ -1,0 +1,5 @@
+# Never commit real secrets. They live as Render env vars only.
+.env
+*.local
+peer-settings.*.json
+!peer-settings.example.json

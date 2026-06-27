@@ -1,0 +1,46 @@
+# Render Blueprint — provisions the gateway in one shot.
+# In the Render dashboard: New → Blueprint → point at this repo.
+# You'll be prompted for the secrets marked `sync: false`.
+services:
+  - type: web
+    name: litellm-gateway
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter            # bump if you need more concurrency
+    healthCheckPath: /health/liveliness
+    envVars:
+      # The one real upstream key. Enter the ROTATED freemodel key when prompted.
+      - key: FREEMODEL_KEY
+        sync: false
+      # Admin token + UI password. Enter a value starting with "sk-".
+      - key: LITELLM_MASTER_KEY
+        sync: false
+      # Encrypts stored credentials. Auto-generated once — never change it after
+      # the first deploy or stored keys become unreadable.
+      - key: LITELLM_SALT_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: litellm-db
+          property: connectionString
+      - key: STORE_MODEL_IN_DB
+        value: "True"
+      # Uncomment after adding the keyvalue service below for exact rate limits.
+      # - key: REDIS_URL
+      #   fromService:
+      #     name: litellm-redis
+      #     type: keyvalue
+      #     property: connectionString
+
+databases:
+  - name: litellm-db
+    plan: basic-256mb        # smallest paid tier; free tier expires after 30 days
+
+# Optional Redis/Key Value for accurate cross-restart RPM/TPM counters.
+# Uncomment this block AND the REDIS_URL env var above to enable.
+# services entry must live under the top-level `services:` list above; shown here
+# for reference:
+#   - type: keyvalue
+#     name: litellm-redis
+#     plan: free
+#     maxmemoryPolicy: noeviction
