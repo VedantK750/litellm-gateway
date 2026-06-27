@@ -1,7 +1,7 @@
 # LiteLLM AI gateway for Render.
-# Pinned to an immutable SemVer stable tag (NOT :main-latest / :main-stable) for
-# supply-chain hygiene. Bump deliberately. Latest stable as of this scaffold: v1.90.0.
-FROM ghcr.io/berriai/litellm-database:v1.90.0-stable
+# Pinned to an immutable SemVer release tag (NOT :main-latest / :main-stable) for
+# supply-chain hygiene. Bump deliberately. Latest release as of this scaffold: v1.90.0.
+FROM ghcr.io/berriai/litellm-database:v1.90.0
 
 COPY config.yaml /app/config.yaml
 
