@@ -15,3 +15,6 @@ general_settings:
 litellm_settings:
   # Silently drop provider params the upstream doesn't accept instead of erroring.
   drop_params: true
+  # Trim memory/overhead on a small instance.
+  telemetry: false
+  set_verbose: false
